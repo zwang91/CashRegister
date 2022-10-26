@@ -13,7 +13,7 @@ namespace CashRegisterTest
         public bool HasPrinted { get; set; }
         public override void Print(string content)
         {
-            base.Print(content);
+            //base.Print(content);
             HasPrinted = true;
         }
     }
