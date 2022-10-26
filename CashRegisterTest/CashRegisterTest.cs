@@ -1,4 +1,6 @@
+using System.Threading;
 using Moq;
+using Xunit.Sdk;
 
 namespace CashRegisterTest
 {
@@ -47,6 +49,19 @@ namespace CashRegisterTest
             cashRegister.Process(stubPurchase.Object);
             //then
             spyPrinter.Verify(_ => _.Print("moq stub purchase"));
+        }
+
+		[Fact]
+		public void Should_throw_HardwareException_when_process_given_stub_printer_throw_out_of_paper_exception()
+        {
+            //given
+            var stubPrinter = new Mock<Printer>();
+            var cashRegister = new CashRegister(stubPrinter.Object);
+            var purchase = new Purchase();
+            stubPrinter.Setup(_ => _.Print(It.IsAny<string>())).Throws(new PrinterOutOfPaperException());
+            //when
+            //then
+            Assert.Throws<HardwareException>(() => cashRegister.Process(purchase));
         }
     }
 }
